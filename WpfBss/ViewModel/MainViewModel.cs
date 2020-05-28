@@ -23,6 +23,7 @@ namespace WpfBss.ViewModel
         public DelegateCommand LoadDBActionCommand { get; set; }
         public DelegateCommand NewUserActionCommand { get; set; }
         public DelegateCommand InitCommand { get; set; }
+        public DelegateCommand DeleteActionCommand { get; set; }
 
         private bool _TypeUser;
         public bool TypeUser
@@ -139,6 +140,7 @@ namespace WpfBss.ViewModel
             DeSerializeActionCommand = new DelegateCommand(DeSerializeAction);
             LoadDBActionCommand = new DelegateCommand(LoadDBAction);
             NewUserActionCommand = new DelegateCommand(NewUserAction);
+            DeleteActionCommand = new DelegateCommand(DeleteAction);
             InitCommand = new DelegateCommand(Init);
         }
 
@@ -149,6 +151,44 @@ namespace WpfBss.ViewModel
             ObjPerson = new Person();
             ObjClient = new Client();
             ObjEmployee = new Employee();
+        }
+
+        public void DeleteAction()
+        {
+            if (TypeUser == false)
+            {
+                using (var con = new UserContext())
+                {
+                    var client = con.Clients.Find(SelectedClient.Id);
+                    if (client != null)
+                    {
+                        con.Clients.Remove(client);
+                        con.SaveChanges();
+                        Download();
+                    }
+                    else
+                    {
+                        throw new Exception("Элемент не найден");
+                    }
+                }
+            }
+            else
+            {
+                using (var con = new UserContext())
+                {
+                    var employee = con.Employees.Find(SelectedEmployee.Id);
+                    if (employee != null)
+                    {
+                        con.Employees.Remove(employee);
+                        con.SaveChanges();
+                        Download();
+                    }
+                    else
+                    {
+                        throw new Exception("Элемент не найден");
+                    }
+                }
+            }
         }
 
         public void NewUserAction()
@@ -168,7 +208,7 @@ namespace WpfBss.ViewModel
         {
             ObservableCollection<Employee> Emp = new ObservableCollection<Employee>();
             ObservableCollection<Client> Cli = new ObservableCollection<Client>();
-            XmlData.DeSerializeSerializationData(ref Emp, ref Cli,  ObjClient, ObjEmployee);
+            XmlData.DeSerializeSerializationData(ref Emp, ref Cli, ObjClient, ObjEmployee);
             Employees = Emp;
             Clients = Cli;
         }
@@ -238,7 +278,7 @@ namespace WpfBss.ViewModel
         {
             if (TypeUser == false)
             {
-                
+
                 Client client = _ObjClient;
                 client.Person = _ObjPerson;
                 Client clientUpdate;

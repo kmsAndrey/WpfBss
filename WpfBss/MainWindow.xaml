@@ -76,6 +76,7 @@
                     <Button Command="{Binding SerializeActionCommand}" Content="XMl"/>
                     <Button Command="{Binding DeSerializeActionCommand}" Content="DeXMl"/>
                     <Button Command="{Binding LoadDBActionCommand}" Content="Загрузка БД"/>
+                    <Button Command="{Binding DeleteActionCommand}" Content="Удаление человека"/>
                 </UniformGrid>
                 <StackPanel>
                     <UniformGrid>
