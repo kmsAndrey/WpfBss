@@ -1,0 +1,23 @@
+<?xml version="1.0"?>
+<ArrayOfEmployee xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+  <Employee>
+    <Id>1</Id>
+    <Person>
+      <Id>39</Id>
+      <FIO>Игорь В</FIO>
+      <Phone>23452345</Phone>
+      <BirthDay>2020-05-12T00:00:00</BirthDay>
+    </Person>
+    <INN>889993488823</INN>
+  </Employee>
+  <Employee>
+    <Id>2</Id>
+    <Person>
+      <Id>40</Id>
+      <FIO>Олег А</FIO>
+      <Phone>4352</Phone>
+      <BirthDay>2020-05-08T00:00:00</BirthDay>
+    </Person>
+    <INN>2344111</INN>
+  </Employee>
+</ArrayOfEmployee>

@@ -1,12 +1,110 @@
 ﻿<Window x:Class="WpfBss.MainWindow"
+        xmlns:dxmvvm="http://schemas.devexpress.com/winfx/2008/xaml/mvvm"
+        xmlns:dxg="http://schemas.devexpress.com/winfx/2008/xaml/grid" 
+        xmlns:dxlc="http://schemas.devexpress.com/winfx/2008/xaml/layoutcontrol" 
+        xmlns:dxe="http://schemas.devexpress.com/winfx/2008/xaml/editors"
         xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-        xmlns:local="clr-namespace:WpfBss"
+        xmlns:local="clr-namespace:WpfBss.ViewModel"
         mc:Ignorable="d"
         Title="MainWindow" Height="450" Width="800">
+
+    <Window.DataContext>
+        <local:MainViewModel/>
+    </Window.DataContext>
+    <Window.Resources>
+        <dxmvvm:BooleanNegationConverter x:Key="BooleanNegationConverter"/>
+    </Window.Resources>
+    <dxmvvm:Interaction.Behaviors>
+        <dxmvvm:EventToCommand Event="FrameworkElement.Loaded"  Command="{Binding InitCommand}"/>
+    </dxmvvm:Interaction.Behaviors>
+
     <Grid>
-        
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="*" MinWidth="400"/>
+            <ColumnDefinition Width="8"/>
+            <ColumnDefinition MinWidth="270" MaxWidth="310" />
+        </Grid.ColumnDefinitions>
+        <DockPanel Grid.Column="0">
+            <StackPanel DockPanel.Dock="Top" Margin="8 0 4 4" Orientation="Horizontal">
+
+            </StackPanel>
+
+
+                <UniformGrid Rows="2">
+
+                <StackPanel>
+                <TextBlock Text="Пациент"/>
+                <dxg:GridControl MaxHeight="500" ItemsSource="{Binding Clients}" SelectedItem="{Binding SelectedClient}" SelectionMode="Row" Margin="0,0,10,0" Grid.Column="0" >
+                    <dxg:GridControl.View>
+                        <dxg:TableView AllowPerPixelScrolling="True" ShowTotalSummary="False" AllowEditing="False" ShowGroupPanel="True" AllowSorting="True" />
+                    </dxg:GridControl.View>
+                    <dxg:GridColumn FieldName="Person.Id" Header="Номер" Width="Auto"/>
+                    <dxg:GridColumn FieldName="Person.FIO" Header="ФИО"/>
+                    <dxg:GridColumn FieldName="Person.Phone" Header="Телефон"/>
+                    <dxg:GridColumn FieldName="MedicalCard" Header="Медицинская карта"/>
+                    <dxg:GridColumn FieldName="Id" Header="Id"/>
+                </dxg:GridControl>
+                </StackPanel>
+                <StackPanel>
+                    <TextBlock Text="Сотрудник"/>
+                    <dxg:GridControl MaxHeight="500" ItemsSource="{Binding Employees}" SelectedItem="{Binding SelectedEmployee}" SelectionMode="Row" Margin="0,0,10,0" Grid.Column="0" ScrollViewer.HorizontalScrollBarVisibility="Auto">
+                        <dxg:GridControl.View>
+                            <dxg:TableView AllowPerPixelScrolling="True" ShowTotalSummary="False" AllowEditing="False" ShowGroupPanel="True" AllowSorting="True" />
+                        </dxg:GridControl.View>
+                        <dxg:GridColumn FieldName="Person.Id" Header="Номер" Width="Auto"/>
+                        <dxg:GridColumn FieldName="Person.FIO" Header="ФИО"/>
+                        <dxg:GridColumn FieldName="Person.Phone" Header="Телефон"/>
+                        <dxg:GridColumn FieldName="INN" Header="ИНН"/>
+                        <dxg:GridColumn FieldName="Id" Header="ID"/>
+                    </dxg:GridControl>
+                </StackPanel>
+            </UniformGrid>
+
+        </DockPanel>
+        <GridSplitter Grid.Column="1" VerticalAlignment="Stretch" HorizontalAlignment="Stretch" Width="4" />
+        <GroupBox Header="Функции" Grid.Column="2">
+            <DockPanel>
+                <DockPanel DockPanel.Dock="Top" HorizontalAlignment="Center">
+                    <RadioButton Content="Пациент" IsChecked="{Binding TypeUser, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged, Converter={StaticResource BooleanNegationConverter}}"/>
+                    <RadioButton Content="Сотрудник" IsChecked="{Binding TypeUser, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"/>
+                </DockPanel>
+                <UniformGrid DockPanel.Dock="Bottom">
+                    <Button Command="{Binding ClearActionCommand}" Content="Очистить"/>
+                    <Button Command="{Binding SerializeActionCommand}" Content="XMl"/>
+                    <Button Command="{Binding DeSerializeActionCommand}" Content="DeXMl"/>
+                    <Button Command="{Binding LoadDBActionCommand}" Content="Загрузка БД"/>
+                </UniformGrid>
+                <StackPanel>
+                    <UniformGrid>
+                        <TextBox Text="{Binding ObjPerson.FIO, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" Width="120"/>
+                        <TextBlock Text="ФИО"/>
+                    </UniformGrid>
+                    <UniformGrid>
+                        <dxe:DateEdit Width="120" EditValue="{Binding ObjPerson.BirthDay, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" DisplayFormatString="dd.MM.yyyy" />
+                        <TextBlock Text="Дата рождения"/>
+                    </UniformGrid>
+                    <UniformGrid>
+                        <TextBox Text="{Binding ObjPerson.Phone, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" Width="120"/>
+                        <TextBlock Text="Телефон"/>
+                    </UniformGrid>
+                    <UniformGrid>
+                        <TextBox Text="{Binding ObjEmployee.INN, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" Width="120" IsEnabled="{Binding TypeUser}"/>
+                        <TextBlock Text="ИНН"/>
+                    </UniformGrid>
+                    <UniformGrid>
+                        <TextBox Text="{Binding ObjClient.MedicalCard, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" IsEnabled="{Binding TypeUser,Converter={StaticResource BooleanNegationConverter}}" Width="120"/>
+                        <TextBlock Text="Медицинская карта"/>
+                    </UniformGrid>
+                    <UniformGrid>
+                        <Button Command="{Binding SaveActionCommand}" Content="Сохранить / Обновить"/>
+                        <Button Command="{Binding NewUserActionCommand}" Content="Новый человек"/>
+                    </UniformGrid>
+                </StackPanel>
+
+            </DockPanel>
+        </GroupBox>
     </Grid>
 </Window>

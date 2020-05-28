@@ -1,0 +1,23 @@
+<?xml version="1.0"?>
+<ArrayOfClient xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+  <Client>
+    <Id>1</Id>
+    <Person>
+      <Id>37</Id>
+      <FIO>Андрей</FIO>
+      <Phone>556674</Phone>
+      <BirthDay>2020-05-21T00:00:00</BirthDay>
+    </Person>
+    <MedicalCard>234a</MedicalCard>
+  </Client>
+  <Client>
+    <Id>2</Id>
+    <Person>
+      <Id>39</Id>
+      <FIO>Игорь В</FIO>
+      <Phone>23452345</Phone>
+      <BirthDay>2020-05-12T00:00:00</BirthDay>
+    </Person>
+    <MedicalCard>90000</MedicalCard>
+  </Client>
+</ArrayOfClient>
